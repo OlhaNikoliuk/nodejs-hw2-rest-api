@@ -3,7 +3,7 @@ const path = require('path');
 const { v4 } = require('uuid');
 const listContacts = require('./listContacts');
 
-const contactsPath = path.join(__dirname, '../contacts.json');
+const contactsPath = path.join(__dirname, '../../', 'db', 'contacts.json');
 
 const addContact = async ({ name, email, phone }) => {
   try {
