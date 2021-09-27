@@ -1,24 +1,19 @@
 const { Contact } = require('../../models');
-const { joiContactSchema } = require('../../models/contact');
+const { joiUpdateFavorite } = require('../../models/contact');
 
-const updateContact = async (req, res, next) => {
+const updateFavorite = async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
-    if (!(name || email || phone)) {
-      const error = new Error(`Missing fields`);
-      error.status = 400;
-      throw error;
-    }
-    const { error } = joiContactSchema.validate(req.body);
+    const { error } = joiUpdateFavorite.validate(req.body);
     if (error) {
-      const err = new Error(error.message);
+      const err = new Error('Missing field favorite');
       err.status = 400;
       throw err;
     }
     const { contactId } = req.params;
+    const { favorite } = req.body;
     const updatedContact = await Contact.findByIdAndUpdate(
       contactId,
-      req.body,
+      { favorite },
       { new: true }
     );
 
@@ -37,4 +32,4 @@ const updateContact = async (req, res, next) => {
   }
 };
 
-module.exports = updateContact;
+module.exports = updateFavorite;

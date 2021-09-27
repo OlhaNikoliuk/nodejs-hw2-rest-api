@@ -1,17 +1,17 @@
-const contactsOperations = require('../../model/contacts');
-const contactsJoinSchema = require('../../schemas');
+const { Contact } = require('../../models');
+const { joiContactSchema } = require('../../models/contact');
 
 const addContact = async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
-    const { error } = contactsJoinSchema.validate({ name, email, phone });
+    const { error } = joiContactSchema.validate({ name, email, phone });
     if (error) {
       const err = new Error(error.message);
       err.status = 400;
       throw err;
     }
 
-    const newContact = await contactsOperations.addContact({
+    const newContact = await Contact.create({
       name,
       email,
       phone,

@@ -1,13 +1,18 @@
 const mongoose = require('mongoose');
-const DB_HOST =
-  'mongodb+srv://Olha:KVJngdtsddqBdaaQ@cluster0.zgwj3.mongodb.net/contacts?retryWrites=true&w=majority';
+require('dotenv').config();
+
+const app = require('../app');
+
+const { DB_HOST, PORT = 3000 } = process.env;
+
 mongoose
   .connect(DB_HOST, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log('Data base connect success');
+    app.listen(PORT);
+    console.log('Database connection successful');
   })
   .catch((error) => {
     console.log(error.message);
