@@ -1,9 +1,9 @@
 const { User } = require('../../models');
 const { Conflict } = require('http-errors');
 const bcrypt = require('bcryptjs');
-const logout = async (req, res, next) => {
-  try {
-  } catch (error) {}
+
+const logOut = async (req, res, next) => {
+  console.log(req.user);
 };
 
-module.exports = logout;
+module.exports = logOut;

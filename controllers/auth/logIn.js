@@ -4,14 +4,15 @@ const { NotFound, BadRequest } = require('http-errors');
 const logIn = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email }, '_id email password');
-  if (!user) {
-    throw new NotFound(`Email ${email} not found`);
-  }
-  if (!user.comparePassword(password)) {
-    throw new BadRequest('Invallid password');
+
+  if (!user || !user.comparePassword(password)) {
+    throw new BadRequest('Email or password is wrong');
   }
 
-  const token = '123456789';
+  const token = user.createToken();
+
+  await User.findByIdAndUpdate(user._id, { token });
+
   res.json({
     status: 'succes',
     code: 200,
