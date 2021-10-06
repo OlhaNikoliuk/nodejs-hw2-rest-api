@@ -1,5 +1,6 @@
 const { User } = require('../../models');
-const { NotFound, BadRequest } = require('http-errors');
+const { BadRequest } = require('http-errors');
+const { sendSuccessRes } = require('../../utils');
 
 const logIn = async (req, res, next) => {
   const { email, password } = req.body;
@@ -11,15 +12,9 @@ const logIn = async (req, res, next) => {
 
   const token = user.createToken();
 
-  await User.findByIdAndUpdate(user._id, { token });
+  const leggedInUser = await User.findByIdAndUpdate(user._id, { token });
 
-  res.json({
-    status: 'succes',
-    code: 200,
-    data: {
-      token,
-    },
-  });
+  sendSuccessRes(res, { user: leggedInUser, message: 'Success signin' });
 };
 
 module.exports = logIn;

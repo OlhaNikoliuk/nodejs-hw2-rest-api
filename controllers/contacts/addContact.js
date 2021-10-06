@@ -12,9 +12,8 @@ const addContact = async (req, res, next) => {
     }
 
     const newContact = await Contact.create({
-      name,
-      email,
-      phone,
+      ...req.body,
+      owner: req.user._id,
     });
 
     res.status(201).json({

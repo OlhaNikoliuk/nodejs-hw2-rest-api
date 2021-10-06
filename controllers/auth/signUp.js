@@ -1,5 +1,6 @@
 const { User } = require('../../models');
 const { Conflict } = require('http-errors');
+const { sendSuccessRes } = require('../../utils');
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -12,14 +13,7 @@ const register = async (req, res, next) => {
   newUser.setPassword(password);
   await newUser.save();
 
-  res.json({
-    status: 'created',
-    code: 201,
-    message: 'Secces signup',
-    response: {
-      user: newUser,
-    },
-  });
+  sendSuccessRes(res, { user: newUser, message: 'Success signup' }, 201);
 };
 
 module.exports = register;
