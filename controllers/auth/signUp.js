@@ -1,5 +1,6 @@
-const { User } = require('../../models');
 const { Conflict } = require('http-errors');
+const gravatar = require('gravatar');
+const { User } = require('../../models');
 const { sendSuccessRes } = require('../../utils');
 
 const register = async (req, res, next) => {
@@ -8,9 +9,11 @@ const register = async (req, res, next) => {
   if (user) {
     throw new Conflict(`Email in use`);
   }
+  const avatar = gravatar.url(email, { protocol: 'https', s: 250 });
+  const newUser = new User({ email, avatarURL: avatar });
 
-  const newUser = new User({ email });
   newUser.setPassword(password);
+
   await newUser.save();
 
   sendSuccessRes(res, { user: newUser, message: 'Success signup' }, 201);

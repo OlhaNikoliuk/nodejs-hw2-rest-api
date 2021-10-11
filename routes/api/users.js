@@ -6,6 +6,7 @@ const {
   controllerWrapper,
   validation,
   authenticate,
+  uploadMiddleware,
 } = require('../../middlewares');
 const { authController } = require('../../controllers');
 
@@ -19,6 +20,7 @@ router.post(
   validation(joiUserSchema),
   controllerWrapper(authController.logIn)
 );
+
 router.get('/logout', authenticate, controllerWrapper(authController.logOut));
 router.get(
   '/current',
@@ -26,4 +28,10 @@ router.get(
   controllerWrapper(authController.getCurrentUser)
 );
 
+router.patch(
+  '/avatars',
+  authenticate,
+  uploadMiddleware.single('avatar'),
+  controllerWrapper(authController.addAvatar)
+);
 module.exports = router;
