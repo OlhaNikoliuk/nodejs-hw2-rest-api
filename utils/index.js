@@ -1,3 +1,7 @@
 const sendSuccessRes = require('./sendSeccessRes');
+const sendEmail = require('./sendEmail');
 
-module.exports = { sendSuccessRes };
+module.exports = {
+  sendSuccessRes,
+  sendEmail,
+};

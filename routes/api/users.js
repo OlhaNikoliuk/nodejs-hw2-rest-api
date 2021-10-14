@@ -9,12 +9,16 @@ const {
   uploadMiddleware,
 } = require('../../middlewares');
 const { authController } = require('../../controllers');
+const { route } = require('./contacts');
 
 router.post(
   '/signup',
   validation(joiUserSchema),
   controllerWrapper(authController.signUp)
 );
+
+router.get('/verify/:verifyToken', controllerWrapper(authController.verify));
+
 router.post(
   '/login',
   validation(joiUserSchema),
@@ -34,4 +38,5 @@ router.patch(
   uploadMiddleware.single('avatar'),
   controllerWrapper(authController.addAvatar)
 );
+
 module.exports = router;

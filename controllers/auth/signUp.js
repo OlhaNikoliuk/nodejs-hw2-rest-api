@@ -1,7 +1,8 @@
 const { Conflict } = require('http-errors');
+const { nanoid } = require('nanoid');
 const gravatar = require('gravatar');
 const { User } = require('../../models');
-const { sendSuccessRes } = require('../../utils');
+const { sendSuccessRes, sendEmail } = require('../../utils');
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -10,11 +11,22 @@ const register = async (req, res, next) => {
     throw new Conflict(`Email in use`);
   }
   const avatar = gravatar.url(email, { protocol: 'https', s: 250 });
-  const newUser = new User({ email, avatarURL: avatar });
+  const verifyToken = nanoid();
+  const newUser = new User({
+    email,
+    avatarURL: avatar,
+    verifyToken,
+  });
 
   newUser.setPassword(password);
-
   await newUser.save();
+
+  const data = {
+    to: email,
+    subject: 'Sending with SendGrid is Fun',
+    html: `<strong> Welcome! </strong><p> <a href='http://localhost:3000/api/users/verify/${verifyToken}' target="blalnk">Let's confirm your email address</a></p>`,
+  };
+  await sendEmail(data);
 
   sendSuccessRes(res, { user: newUser, message: 'Success signup' }, 201);
 };
