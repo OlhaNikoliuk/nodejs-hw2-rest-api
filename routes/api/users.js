@@ -19,6 +19,8 @@ router.post(
 
 router.get('/verify/:verifyToken', controllerWrapper(authController.verify));
 
+router.post('/verify', controllerWrapper(authController.reVerify));
+
 router.post(
   '/login',
   validation(joiUserSchema),
@@ -26,6 +28,7 @@ router.post(
 );
 
 router.get('/logout', authenticate, controllerWrapper(authController.logOut));
+
 router.get(
   '/current',
   authenticate,
